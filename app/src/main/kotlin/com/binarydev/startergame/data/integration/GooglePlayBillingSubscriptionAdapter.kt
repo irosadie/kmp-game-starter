@@ -20,6 +20,7 @@ import com.binarydev.startergame.core.contracts.SubscriptionEntitlementState
 import com.binarydev.startergame.core.contracts.SubscriptionVerificationRequestDto
 import com.binarydev.startergame.data.preferences.DataStoreDevicePreferencesRepository
 import com.binarydev.startergame.data.remote.GoBackendApiClient
+import kotlin.coroutines.resume
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.resume
 
 /**
  * Real Google Play Billing Library v7 (`BillingClient`) implementation for "Remove Ads" Subscription

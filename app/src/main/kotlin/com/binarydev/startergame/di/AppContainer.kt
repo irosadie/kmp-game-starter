@@ -26,7 +26,6 @@ import com.binarydev.startergame.data.integration.CredentialManagerAuthAdapter
 import com.binarydev.startergame.data.integration.FcmPushTokenAndRefreshAdapter
 import com.binarydev.startergame.data.integration.GooglePlayBillingSubscriptionAdapter
 import com.binarydev.startergame.data.integration.SessionRepositoryImpl
-import com.binarydev.startergame.data.integration.SimulatedGoogleIdTokenProvider
 import com.binarydev.startergame.data.integration.StarterFirebaseMessagingService
 import com.binarydev.startergame.data.local.StarterGameDatabase
 import com.binarydev.startergame.data.preferences.DataStoreDevicePreferencesRepository

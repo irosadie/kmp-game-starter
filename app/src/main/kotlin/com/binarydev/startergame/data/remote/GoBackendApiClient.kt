@@ -16,13 +16,13 @@ import com.binarydev.startergame.core.contracts.ScoreSubmissionRequest
 import com.binarydev.startergame.core.contracts.ScoreSubmissionResponse
 import com.binarydev.startergame.core.contracts.SubscriptionVerificationRequestDto
 import com.binarydev.startergame.core.contracts.SubscriptionVerificationResponseDto
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 
 /**
  * Go Backend v1 HTTP JSON contract client interface:

@@ -1,0 +1,63 @@
+build:
+  maxIssues: 0
+
+style:
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    active: false
+  ReturnCount:
+    active: false
+  WildcardImport:
+    active: true
+  UnusedPrivateMember:
+    active: true
+    ignoreAnnotated:
+      - "Preview"
+  ForbiddenComment:
+    active: false
+  UnnecessaryAbstractClass:
+    active: false
+
+naming:
+  FunctionNaming:
+    active: true
+    ignoreAnnotated:
+      - "Composable"
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: "[A-Z][A-Za-z0-9_]*"
+
+complexity:
+  LongMethod:
+    active: true
+    threshold: 120
+    ignoreAnnotated:
+      - "Composable"
+  LongParameterList:
+    active: true
+    functionThreshold: 12
+    constructorThreshold: 14
+    ignoreDefaultParameters: true
+    ignoreAnnotated:
+      - "Composable"
+  LargeClass:
+    active: false
+  TooManyFunctions:
+    active: false
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 25
+  NestedBlockDepth:
+    active: true
+    threshold: 6
+
+performance:
+  SpreadOperator:
+    active: false
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+  SwallowedException:
+    active: false

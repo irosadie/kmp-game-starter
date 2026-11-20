@@ -102,18 +102,16 @@ class GameSessionCoordinator<LevelData, State, Move>(
     val ruleEngine: LevelRuleEngine<LevelData, State, Move>,
     private val achievementEvaluator: AchievementEvaluator = AchievementEvaluator(ruleEngine.achievements)
 ) {
-    fun initialProgressMap(): Map<String, LevelProgress> {
-        return ruleEngine.levels.mapIndexed { index, level ->
-            val id = ruleEngine.getLevelId(level)
-            id to LevelProgress(
-                levelId = id,
-                unlocked = index == 0,
-                completed = false,
-                bestScore = 0,
-                checkpointJson = null
-            )
-        }.toMap()
-    }
+    fun initialProgressMap(): Map<String, LevelProgress> = ruleEngine.levels.mapIndexed { index, level ->
+        val id = ruleEngine.getLevelId(level)
+        id to LevelProgress(
+            levelId = id,
+            unlocked = index == 0,
+            completed = false,
+            bestScore = 0,
+            checkpointJson = null
+        )
+    }.toMap()
 
     fun startOrResumeLevel(
         level: LevelData,

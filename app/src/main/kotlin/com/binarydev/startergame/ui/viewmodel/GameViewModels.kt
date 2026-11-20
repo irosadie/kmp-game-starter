@@ -6,9 +6,9 @@ import com.binarydev.startergame.core.achievement.AchievementState
 import com.binarydev.startergame.core.contracts.AccountStatus
 import com.binarydev.startergame.core.contracts.AchievementSyncRequestDto
 import com.binarydev.startergame.core.contracts.ActiveConfigState
-import com.binarydev.startergame.core.contracts.AdFormatConfig
 import com.binarydev.startergame.core.contracts.AdRewardFlowResult
 import com.binarydev.startergame.core.contracts.AuthActionResult
+import com.binarydev.startergame.core.contracts.BillingActionResult
 import com.binarydev.startergame.core.contracts.ConfigRefreshSignal
 import com.binarydev.startergame.core.contracts.ConfigSource
 import com.binarydev.startergame.core.contracts.DevicePreferences
@@ -17,7 +17,6 @@ import com.binarydev.startergame.core.contracts.ProgressSyncEventDto
 import com.binarydev.startergame.core.contracts.RemoteGameConfigDto
 import com.binarydev.startergame.core.contracts.ScoreSubmissionRequest
 import com.binarydev.startergame.core.contracts.SubscriptionEntitlementState
-import com.binarydev.startergame.core.contracts.BillingActionResult
 import com.binarydev.startergame.core.engine.HintRequestResult
 import com.binarydev.startergame.core.engine.LevelOutcome
 import com.binarydev.startergame.core.engine.StartLevelResult
@@ -28,13 +27,13 @@ import com.binarydev.startergame.core.model.PlayerBalance
 import com.binarydev.startergame.core.model.RewardBundle
 import com.binarydev.startergame.data.repository.SimulatedAdMode
 import com.binarydev.startergame.di.AppContainer
+import java.util.UUID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 // --- 1. Home UI State & ViewModel ---
 
@@ -225,13 +224,15 @@ class GameplayViewModel<LevelData, State, Move>(
         val ledger = container.progressRepository.loadCurrentRewardLedger()
         val features = currentEffectiveFeatures()
 
-        when (val startRes = container.coordinator.startOrResumeLevel(
-            level = level,
-            attemptId = attemptId,
-            progressMap = progressMap,
-            ledger = ledger,
-            featuresOverride = features
-        )) {
+        when (
+            val startRes = container.coordinator.startOrResumeLevel(
+                level = level,
+                attemptId = attemptId,
+                progressMap = progressMap,
+                ledger = ledger,
+                featuresOverride = features
+            )
+        ) {
             is StartLevelResult.LevelLocked -> {
                 _uiState.update {
                     it.copy(
@@ -326,17 +327,19 @@ class GameplayViewModel<LevelData, State, Move>(
         hintCounter++
         val txId = customTransactionId ?: "hint:${container.ruleEngine.getAttemptId(currentState)}:$hintCounter"
 
-        when (val hintRes = container.coordinator.requestHint(
-            profileId = profileId,
-            level = level,
-            currentState = currentState,
-            hintTransactionId = txId,
-            progressMap = progressMap,
-            ledger = ledger,
-            achievements = achievements,
-            featuresOverride = features,
-            timestampEpochMs = now
-        )) {
+        when (
+            val hintRes = container.coordinator.requestHint(
+                profileId = profileId,
+                level = level,
+                currentState = currentState,
+                hintTransactionId = txId,
+                progressMap = progressMap,
+                ledger = ledger,
+                achievements = achievements,
+                featuresOverride = features,
+                timestampEpochMs = now
+            )
+        ) {
             is HintRequestResult.FeatureDisabled -> {
                 _uiState.update { it.copy(statusMessage = "Fitur Hint dinonaktifkan pada konfigurasi game ini.") }
             }

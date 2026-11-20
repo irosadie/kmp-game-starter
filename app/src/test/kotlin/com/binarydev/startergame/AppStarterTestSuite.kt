@@ -62,6 +62,8 @@ import com.binarydev.startergame.ui.theme.buildStarterTypography
 import com.binarydev.startergame.ui.viewmodel.GameplayViewModel
 import com.binarydev.startergame.ui.viewmodel.LeaderboardViewModel
 import com.binarydev.startergame.ui.viewmodel.SettingsViewModel
+import java.io.File
+import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -82,8 +84,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import java.io.File
-import java.util.UUID
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
@@ -209,7 +209,10 @@ class AppStarterTestSuite {
 
     @Test
     fun goBackendV1JsonContractsSerializeAndDeserializeCleanly() {
-        val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
+        val json = Json {
+            ignoreUnknownKeys = true
+            encodeDefaults = true
+        }
 
         val authReq = GoogleAuthExchangeRequest("id-tok", "inst-1", "guest-1")
         val authDecoded = json.decodeFromString<GoogleAuthExchangeRequest>(json.encodeToString(authReq))

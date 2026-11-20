@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>MatchingDeclarationName:StarterGameNavHost.kt$StarterDestinations</ID>
+    <ID>MatchingDeclarationName:StarterGameTheme.kt$StarterThemeConfig</ID>
+    <ID>UnusedParameter:GameScreens.kt$onSetSimulatedAdMode: (SimulatedAdMode) -&gt; Unit</ID>
+  </CurrentIssues>
+</SmellBaseline>

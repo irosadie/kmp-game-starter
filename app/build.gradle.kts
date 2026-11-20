@@ -31,12 +31,10 @@ val localProps: Properties = Properties().apply {
     }
 }
 
-fun envOrDefault(key: String, default: String): String {
-    return System.getenv(key)?.takeIf { it.isNotBlank() }
-        ?: dotEnvMap[key]?.takeIf { it.isNotBlank() }
-        ?: localProps.getProperty(key)?.takeIf { it.isNotBlank() }
-        ?: default
-}
+fun envOrDefault(key: String, default: String): String = System.getenv(key)?.takeIf { it.isNotBlank() }
+    ?: dotEnvMap[key]?.takeIf { it.isNotBlank() }
+    ?: localProps.getProperty(key)?.takeIf { it.isNotBlank() }
+    ?: default
 
 fun escapeBuildConfigString(value: String): String =
     "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""

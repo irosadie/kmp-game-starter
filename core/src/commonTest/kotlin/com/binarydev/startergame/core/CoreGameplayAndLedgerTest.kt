@@ -13,7 +13,6 @@ import com.binarydev.startergame.core.ledger.RewardLedger
 import com.binarydev.startergame.core.model.GameMetadataAndFeatures
 import com.binarydev.startergame.core.model.PlayerBalance
 import com.binarydev.startergame.core.model.ResourceType
-import com.binarydev.startergame.core.model.RewardBundle
 import com.binarydev.startergame.core.model.RewardSource
 import com.binarydev.startergame.core.sample.SamplePuzzleGame
 import com.binarydev.startergame.core.sample.SamplePuzzleMove

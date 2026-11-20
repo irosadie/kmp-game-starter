@@ -63,11 +63,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.binarydev.startergame.BuildConfig
 import com.binarydev.startergame.R
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.LoadAdError
 import com.binarydev.startergame.core.achievement.AchievementState
 import com.binarydev.startergame.core.contracts.LeaderboardState
 import com.binarydev.startergame.core.sample.SamplePuzzleMove
@@ -79,6 +74,11 @@ import com.binarydev.startergame.ui.viewmodel.GameplayUiState
 import com.binarydev.startergame.ui.viewmodel.HomeUiState
 import com.binarydev.startergame.ui.viewmodel.LevelResultSummary
 import com.binarydev.startergame.ui.viewmodel.SettingsUiState
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
 import kotlinx.coroutines.delay
 
 // --- 0. Splash Screen (Uses replaceable @drawable/ic_launcher_foreground & @string/app_name) ---
@@ -1038,7 +1038,9 @@ fun AchievementsScreen(
                             )
                             val progressFraction = if (item.targetValue > 0) {
                                 (item.currentProgress.toFloat() / item.targetValue.toFloat()).coerceIn(0f, 1f)
-                            } else 0f
+                            } else {
+                                0f
+                            }
                             LinearProgressIndicator(
                                 progress = { progressFraction },
                                 modifier = Modifier.fillMaxWidth()
@@ -1692,7 +1694,6 @@ fun PersistentBottomAdMobBanner(
 }
 
 // --- 7. Interactive Simulated Rewarded Video Ad Player Modal ---
-
 
 @Composable
 fun SimulatedRewardedVideoAdOverlay(

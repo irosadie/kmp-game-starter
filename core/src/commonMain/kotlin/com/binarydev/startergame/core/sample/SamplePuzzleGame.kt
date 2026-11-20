@@ -64,22 +64,20 @@ class SamplePuzzleGame(
 
     override fun getLevelId(level: SamplePuzzleLevel): String = level.id
 
-    override fun createInitialState(level: SamplePuzzleLevel, attemptId: String): SamplePuzzleState {
-        return SamplePuzzleState(
-            levelId = level.id,
-            attemptId = attemptId,
-            clue = level.clue,
-            targetSequence = level.targetSequence,
-            availableChoices = level.scrambledChoices,
-            placedSequence = emptyList(),
-            mistakes = 0,
-            maxMistakes = level.maxMistakes,
-            hintsUsed = 0,
-            moveCount = 0,
-            baseScore = level.baseScore,
-            lastFeedback = null
-        )
-    }
+    override fun createInitialState(level: SamplePuzzleLevel, attemptId: String): SamplePuzzleState = SamplePuzzleState(
+        levelId = level.id,
+        attemptId = attemptId,
+        clue = level.clue,
+        targetSequence = level.targetSequence,
+        availableChoices = level.scrambledChoices,
+        placedSequence = emptyList(),
+        mistakes = 0,
+        maxMistakes = level.maxMistakes,
+        hintsUsed = 0,
+        moveCount = 0,
+        baseScore = level.baseScore,
+        lastFeedback = null
+    )
 
     override fun getAttemptId(state: SamplePuzzleState): String = state.attemptId
 
@@ -149,38 +147,32 @@ class SamplePuzzleGame(
         )
     }
 
-    override fun evaluateOutcome(state: SamplePuzzleState): LevelOutcome {
-        return when {
-            state.isComplete -> {
-                val score = (state.baseScore - (state.mistakes * 150) - (state.hintsUsed * 100))
-                    .coerceAtLeast(100)
-                LevelOutcome.Won(
-                    score = score,
-                    validatorPayload = mapOf(
-                        "levelId" to state.levelId,
-                        "attemptId" to state.attemptId,
-                        "word" to state.placedSequence.joinToString(""),
-                        "moves" to state.moveCount.toString(),
-                        "mistakes" to state.mistakes.toString(),
-                        "hintsUsed" to state.hintsUsed.toString()
-                    )
+    override fun evaluateOutcome(state: SamplePuzzleState): LevelOutcome = when {
+        state.isComplete -> {
+            val score = (state.baseScore - (state.mistakes * 150) - (state.hintsUsed * 100))
+                .coerceAtLeast(100)
+            LevelOutcome.Won(
+                score = score,
+                validatorPayload = mapOf(
+                    "levelId" to state.levelId,
+                    "attemptId" to state.attemptId,
+                    "word" to state.placedSequence.joinToString(""),
+                    "moves" to state.moveCount.toString(),
+                    "mistakes" to state.mistakes.toString(),
+                    "hintsUsed" to state.hintsUsed.toString()
                 )
-            }
-            state.isFailed -> LevelOutcome.Lost(
-                attemptId = state.attemptId,
-                reason = "Batas kesalahan maksimal (${state.maxMistakes}) tercapai."
             )
-            else -> LevelOutcome.InProgress
         }
+        state.isFailed -> LevelOutcome.Lost(
+            attemptId = state.attemptId,
+            reason = "Batas kesalahan maksimal (${state.maxMistakes}) tercapai."
+        )
+        else -> LevelOutcome.InProgress
     }
 
-    override fun serializeCheckpoint(state: SamplePuzzleState): String {
-        return json.encodeToString(state)
-    }
+    override fun serializeCheckpoint(state: SamplePuzzleState): String = json.encodeToString(state)
 
-    override fun deserializeCheckpoint(level: SamplePuzzleLevel, json: String): SamplePuzzleState {
-        return this.json.decodeFromString<SamplePuzzleState>(json)
-    }
+    override fun deserializeCheckpoint(level: SamplePuzzleLevel, json: String): SamplePuzzleState = this.json.decodeFromString<SamplePuzzleState>(json)
 
     companion object {
         fun defaultLevels(): List<SamplePuzzleLevel> = listOf(

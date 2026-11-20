@@ -10,12 +10,12 @@ import com.binarydev.startergame.core.contracts.DevicePreferences
 import com.binarydev.startergame.core.contracts.DevicePreferencesRepository
 import com.binarydev.startergame.core.contracts.RemoteGameConfigDto
 import com.binarydev.startergame.core.contracts.SubscriptionEntitlementState
+import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.UUID
 
 data class CachedRemoteConfig(
     val config: RemoteGameConfigDto,

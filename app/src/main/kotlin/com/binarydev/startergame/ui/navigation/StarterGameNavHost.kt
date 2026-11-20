@@ -47,14 +47,16 @@ object StarterDestinations {
 fun <LevelData, State, Move> StarterGameApp(
     container: AppContainer<LevelData, State, Move>,
     puzzleBoardContent: @Composable (State, (Move) -> Unit) -> Unit,
-    customHomeScreen: (@Composable (
-        uiState: HomeUiState,
-        onPlayLevel: (String) -> Unit,
-        onWatchRewardedAd: () -> Unit,
-        onOpenLeaderboard: () -> Unit,
-        onOpenAchievements: () -> Unit,
-        onOpenSettings: () -> Unit
-    ) -> Unit)? = null
+    customHomeScreen: (
+        @Composable (
+            uiState: HomeUiState,
+            onPlayLevel: (String) -> Unit,
+            onWatchRewardedAd: () -> Unit,
+            onOpenLeaderboard: () -> Unit,
+            onOpenAchievements: () -> Unit,
+            onOpenSettings: () -> Unit
+        ) -> Unit
+    )? = null
 ) {
     val navController = rememberNavController()
 

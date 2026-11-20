@@ -11,10 +11,10 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import kotlin.coroutines.resume
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.resume
 
 /**
  * Real Google Mobile Ads (AdMob) implementation of AdService using official Google test rewarded ad unit IDs
@@ -167,14 +167,12 @@ class AdMobRewardedAdAdapter(
             showError: String?,
             isActivityAvailable: Boolean,
             claimId: String
-        ): RawAdShowResult {
-            return when {
-                !isActivityAvailable -> RawAdShowResult.NotAvailable("Iklan belum tersedia (Activity tidak aktif).")
-                !loadError.isNullOrBlank() -> RawAdShowResult.FailedToLoadOrShow("AdMob gagal memuat iklan: $loadError")
-                !showError.isNullOrBlank() -> RawAdShowResult.FailedToLoadOrShow("AdMob gagal menampilkan iklan: $showError")
-                rewardEarned -> RawAdShowResult.EarnedReward(claimId)
-                else -> RawAdShowResult.DismissedBeforeReward("Iklan AdMob ditutup sebelum reward diperoleh. Saldo tidak bertambah.")
-            }
+        ): RawAdShowResult = when {
+            !isActivityAvailable -> RawAdShowResult.NotAvailable("Iklan belum tersedia (Activity tidak aktif).")
+            !loadError.isNullOrBlank() -> RawAdShowResult.FailedToLoadOrShow("AdMob gagal memuat iklan: $loadError")
+            !showError.isNullOrBlank() -> RawAdShowResult.FailedToLoadOrShow("AdMob gagal menampilkan iklan: $showError")
+            rewardEarned -> RawAdShowResult.EarnedReward(claimId)
+            else -> RawAdShowResult.DismissedBeforeReward("Iklan AdMob ditutup sebelum reward diperoleh. Saldo tidak bertambah.")
         }
     }
 }

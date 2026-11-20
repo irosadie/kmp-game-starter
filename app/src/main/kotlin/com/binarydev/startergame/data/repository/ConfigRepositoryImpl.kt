@@ -35,12 +35,10 @@ class SimulatedRemoteConfigAdapter(
         levelCompletionGrant = metadata.levelCompletionReward
     )
 
-    fun fetchSimulatedConfig(): Result<RemoteGameConfigDto> {
-        return if (shouldSimulateNetworkFailure) {
-            Result.failure(IllegalStateException("Simulasi: API konfigurasi Go tidak dapat dihubungi"))
-        } else {
-            Result.success(simulatedConfig)
-        }
+    fun fetchSimulatedConfig(): Result<RemoteGameConfigDto> = if (shouldSimulateNetworkFailure) {
+        Result.failure(IllegalStateException("Simulasi: API konfigurasi Go tidak dapat dihubungi"))
+    } else {
+        Result.success(simulatedConfig)
     }
 }
 

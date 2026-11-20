@@ -418,18 +418,16 @@ class RoomProgressRepository<LevelData, State, Move>(
         }
     }
 
-    private fun defaultInitialLevels(): Map<String, LevelProgress> {
-        return ruleEngine.levels.mapIndexed { index, level ->
-            val id = ruleEngine.getLevelId(level)
-            id to LevelProgress(
-                levelId = id,
-                unlocked = index == 0,
-                completed = false,
-                bestScore = 0,
-                checkpointJson = null
-            )
-        }.toMap()
-    }
+    private fun defaultInitialLevels(): Map<String, LevelProgress> = ruleEngine.levels.mapIndexed { index, level ->
+        val id = ruleEngine.getLevelId(level)
+        id to LevelProgress(
+            levelId = id,
+            unlocked = index == 0,
+            completed = false,
+            bestScore = 0,
+            checkpointJson = null
+        )
+    }.toMap()
 
     private fun LevelProgress.toEntity() = LevelProgressEntity(
         levelId = levelId,

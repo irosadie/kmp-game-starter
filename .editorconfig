@@ -1,0 +1,28 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{kt,kts}]
+max_line_length = off
+ktlint_code_style = android_studio
+# Composable function boleh PascalCase
+ktlint_function_naming_ignore_when_annotated_with = Composable
+ktlint_standard_function-naming = enabled
+ktlint_standard_no-wildcard-imports = enabled
+ktlint_standard_filename = disabled
+ktlint_standard_property-naming = disabled
+ktlint_standard_backing-property-naming = disabled
+ktlint_standard_class-signature = disabled
+ktlint_standard_function-signature = disabled
+ktlint_standard_function-expression-body = disabled
+ktlint_standard_value-parameter-comment = disabled
+ktlint_standard_value-argument-comment = disabled
+
+[*.{xml,yml,yaml,toml,md}]
+indent_size = 2

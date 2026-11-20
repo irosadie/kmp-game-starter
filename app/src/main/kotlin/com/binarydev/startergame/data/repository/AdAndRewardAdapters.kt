@@ -10,11 +10,11 @@ import com.binarydev.startergame.core.contracts.RewardClaimStatus
 import com.binarydev.startergame.core.model.RewardBundle
 import com.binarydev.startergame.core.model.RewardSource
 import com.binarydev.startergame.data.remote.GoBackendApiClient
+import kotlin.coroutines.resume
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
 
 enum class SimulatedAdMode {
     COMPLETE_WITH_REWARD,
@@ -45,43 +45,41 @@ class SimulatedAdAdapter(
     private val _activeSession = MutableStateFlow<InteractiveAdSession?>(null)
     val activeSession: StateFlow<InteractiveAdSession?> = _activeSession.asStateFlow()
 
-    override suspend fun showRewardedAd(claimId: String): RawAdShowResult {
-        return when (nextMode) {
-            SimulatedAdMode.DISMISS_EARLY ->
-                RawAdShowResult.DismissedBeforeReward("Simulasi: Pemain menutup iklan sebelum selesai.")
-            SimulatedAdMode.AD_UNAVAILABLE ->
-                RawAdShowResult.NotAvailable("Simulasi: Iklan belum tersedia.")
-            SimulatedAdMode.AD_LOAD_FAILED ->
-                RawAdShowResult.FailedToLoadOrShow("Simulasi: Gagal memuat rewarded ad.")
-            SimulatedAdMode.COMPLETE_WITH_REWARD -> {
-                if (!interactiveUiAttached) {
-                    RawAdShowResult.EarnedReward(claimId)
-                } else {
-                    suspendCancellableCoroutine<RawAdShowResult> { continuation ->
-                        val session = InteractiveAdSession(
-                            claimId = claimId,
-                            durationSeconds = 5,
-                            onCompleted = {
-                                _activeSession.value = null
-                                if (continuation.isActive) {
-                                    continuation.resume(RawAdShowResult.EarnedReward(claimId))
-                                }
-                            },
-                            onDismissedEarly = {
-                                _activeSession.value = null
-                                if (continuation.isActive) {
-                                    continuation.resume(
-                                        RawAdShowResult.DismissedBeforeReward(
-                                            "Iklan ditutup sebelum selesai ditonton. Saldo tidak bertambah."
-                                        )
-                                    )
-                                }
-                            }
-                        )
-                        _activeSession.value = session
-                        continuation.invokeOnCancellation {
+    override suspend fun showRewardedAd(claimId: String): RawAdShowResult = when (nextMode) {
+        SimulatedAdMode.DISMISS_EARLY ->
+            RawAdShowResult.DismissedBeforeReward("Simulasi: Pemain menutup iklan sebelum selesai.")
+        SimulatedAdMode.AD_UNAVAILABLE ->
+            RawAdShowResult.NotAvailable("Simulasi: Iklan belum tersedia.")
+        SimulatedAdMode.AD_LOAD_FAILED ->
+            RawAdShowResult.FailedToLoadOrShow("Simulasi: Gagal memuat rewarded ad.")
+        SimulatedAdMode.COMPLETE_WITH_REWARD -> {
+            if (!interactiveUiAttached) {
+                RawAdShowResult.EarnedReward(claimId)
+            } else {
+                suspendCancellableCoroutine<RawAdShowResult> { continuation ->
+                    val session = InteractiveAdSession(
+                        claimId = claimId,
+                        durationSeconds = 5,
+                        onCompleted = {
                             _activeSession.value = null
+                            if (continuation.isActive) {
+                                continuation.resume(RawAdShowResult.EarnedReward(claimId))
+                            }
+                        },
+                        onDismissedEarly = {
+                            _activeSession.value = null
+                            if (continuation.isActive) {
+                                continuation.resume(
+                                    RawAdShowResult.DismissedBeforeReward(
+                                        "Iklan ditutup sebelum selesai ditonton. Saldo tidak bertambah."
+                                    )
+                                )
+                            }
                         }
+                    )
+                    _activeSession.value = session
+                    continuation.invokeOnCancellation {
+                        _activeSession.value = null
                     }
                 }
             }
@@ -98,12 +96,10 @@ class SwitchableAdService(
     var useRealAdMobTestAds: Boolean = false
 ) : AdService {
 
-    override suspend fun showRewardedAd(claimId: String): RawAdShowResult {
-        return if (useRealAdMobTestAds) {
-            adMobAdAdapter.showRewardedAd(claimId)
-        } else {
-            simulatedAdAdapter.showRewardedAd(claimId)
-        }
+    override suspend fun showRewardedAd(claimId: String): RawAdShowResult = if (useRealAdMobTestAds) {
+        adMobAdAdapter.showRewardedAd(claimId)
+    } else {
+        simulatedAdAdapter.showRewardedAd(claimId)
     }
 }
 
@@ -127,17 +123,15 @@ class RewardClaimService(
         claimId: String,
         rewardBundle: RewardBundle,
         timestampEpochMs: Long
-    ): AdRewardFlowResult {
-        return when (val adResult = adService.showRewardedAd(claimId)) {
-            is RawAdShowResult.DismissedBeforeReward -> AdRewardFlowResult.DismissedEarly(adResult.reason)
-            is RawAdShowResult.NotAvailable -> AdRewardFlowResult.Unavailable(adResult.reason)
-            is RawAdShowResult.FailedToLoadOrShow -> AdRewardFlowResult.Failed(adResult.reason)
-            is RawAdShowResult.EarnedReward -> processEarnedRewardClaim(
-                claimId = adResult.transactionOrClaimId,
-                rewardBundle = rewardBundle,
-                timestampEpochMs = timestampEpochMs
-            )
-        }
+    ): AdRewardFlowResult = when (val adResult = adService.showRewardedAd(claimId)) {
+        is RawAdShowResult.DismissedBeforeReward -> AdRewardFlowResult.DismissedEarly(adResult.reason)
+        is RawAdShowResult.NotAvailable -> AdRewardFlowResult.Unavailable(adResult.reason)
+        is RawAdShowResult.FailedToLoadOrShow -> AdRewardFlowResult.Failed(adResult.reason)
+        is RawAdShowResult.EarnedReward -> processEarnedRewardClaim(
+            claimId = adResult.transactionOrClaimId,
+            rewardBundle = rewardBundle,
+            timestampEpochMs = timestampEpochMs
+        )
     }
 
     suspend fun processEarnedRewardClaim(

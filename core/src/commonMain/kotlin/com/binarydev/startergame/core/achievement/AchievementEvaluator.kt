@@ -61,25 +61,23 @@ data class AchievementEvaluationResult(
 class AchievementEvaluator(
     val definitions: List<AchievementDefinition> = defaultDemoAchievements()
 ) {
-    fun initialStates(existing: Map<String, AchievementState> = emptyMap()): List<AchievementState> {
-        return definitions.map { def ->
-            val saved = existing[def.id]
-            saved?.copy(
-                title = def.title,
-                description = def.description,
-                targetValue = def.targetValue,
-                reward = def.reward
-            ) ?: AchievementState(
-                id = def.id,
-                title = def.title,
-                description = def.description,
-                targetValue = def.targetValue,
-                currentProgress = 0,
-                unlocked = false,
-                reward = def.reward,
-                rewardTransactionId = null
-            )
-        }
+    fun initialStates(existing: Map<String, AchievementState> = emptyMap()): List<AchievementState> = definitions.map { def ->
+        val saved = existing[def.id]
+        saved?.copy(
+            title = def.title,
+            description = def.description,
+            targetValue = def.targetValue,
+            reward = def.reward
+        ) ?: AchievementState(
+            id = def.id,
+            title = def.title,
+            description = def.description,
+            targetValue = def.targetValue,
+            currentProgress = 0,
+            unlocked = false,
+            reward = def.reward,
+            rewardTransactionId = null
+        )
     }
 
     fun evaluateOnLevelCompleted(

@@ -29,10 +29,10 @@ import com.binarydev.startergame.core.contracts.SubscriptionVerificationResponse
 import com.binarydev.startergame.core.ledger.RewardLedger
 import com.binarydev.startergame.core.model.PlayerBalance
 import com.binarydev.startergame.core.model.RewardBundle
+import java.io.IOException
 import kotlinx.coroutines.delay
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.io.IOException
 
 /**
  * Mockup Go Backend v1 HTTP JSON API Client (`MockGoBackendApiClient`).
